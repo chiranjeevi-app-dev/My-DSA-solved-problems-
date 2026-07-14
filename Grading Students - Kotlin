@@ -1,0 +1,91 @@
+import java.io.*
+import java.math.*
+import java.security.*
+import java.text.*
+import java.util.*
+import java.util.concurrent.*
+import java.util.function.*
+import java.util.regex.*
+import java.util.stream.*
+import kotlin.collections.*
+import kotlin.comparisons.*
+import kotlin.io.*
+import kotlin.jvm.*
+import kotlin.jvm.functions.*
+import kotlin.jvm.internal.*
+import kotlin.ranges.*
+import kotlin.sequences.*
+import kotlin.text.*
+
+/*
+ * Complete the 'gradingStudents' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY grades as parameter.
+ */
+
+fun gradingStudents(grades: Array<Int>): Array<Int> {
+
+    // Create a new array to store the final grades.
+    // It has the same size as the original grades array.
+    val finalGrades = Array(grades.size) { 0 }
+
+    // Start from the first grade.
+    var i = 0
+
+    // Loop through every grade in the array.
+    while (i < grades.size) {
+
+        // Current student's grade.
+        val grade = grades[i]
+
+        // Rule 1:
+        // Grades less than 38 are failing grades.
+        // They should never be rounded.
+        if (grade < 38) {
+            finalGrades[i] = grade
+        } else {
+
+            // Find the remainder when divided by 5.
+            // Example:
+            // 84 % 5 = 4
+            // 73 % 5 = 3
+            val remainder = grade % 5
+
+            // Find how much needs to be added
+            // to reach the next multiple of 5.
+            // Example:
+            // 84 -> remainder = 4
+            // Need to add = 5 - 4 = 1
+            val difference = 5 - remainder
+
+            // Rule 2:
+            // Round only if the difference is less than 3.
+            if (difference < 3) {
+                finalGrades[i] = grade + difference
+            } else {
+                // Otherwise keep the original grade.
+                finalGrades[i] = grade
+            }
+        }
+
+        // Move to the next student.
+        i++
+    }
+
+    // Return the updated grades.
+    return finalGrades
+}
+fun main(args: Array<String>) {
+    val gradesCount = readLine()!!.trim().toInt()
+
+    val grades = Array<Int>(gradesCount, { 0 })
+    for (i in 0 until gradesCount) {
+        val gradesItem = readLine()!!.trim().toInt()
+        grades[i] = gradesItem
+    }
+
+    val result = gradingStudents(grades)
+
+    println(result.joinToString("\n"))
+}
